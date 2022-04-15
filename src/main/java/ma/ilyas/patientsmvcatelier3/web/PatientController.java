@@ -46,4 +46,5 @@ public class PatientController {
         return "redirect:/index";
     }
 
+
 }
