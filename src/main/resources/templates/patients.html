@@ -14,16 +14,38 @@
             <div class="card-header">Liste des patients</div>
             <div class="card-body">
                 <form method="get" th:action="@{/user/index}">
-                    <label>Key word</label>
+                    <label>Keyword</label>
                     <input type="text" name="keyword" th:value="${keyword}">
                     <button type="submit" class="btn btn-primary">Chercher</button>
                 </form>
                 <table class="table">
+
                     <thead>
                     <tr>
-                        <th>Id</th><th>Nom</th><th>Date</th><th>Malade</th><th>score</th>
+                        <th>
+                            <a th:href="@{'/user/index?page=' + ${currentPage} +'&sortField=id&sortDir=' + ${reverseSortDir}+ '&keyword='+${keyword}}" >
+                            Id</a>
+                        </th>
+                        <th>
+                            <a th:href="@{'/user/index?page=' + ${currentPage} +'&sortField=nom&sortDir=' + ${reverseSortDir}+ '&keyword='+${keyword}}" >
+                            Nom</a>
+                        </th>
+                        <th>
+                            <a th:href="@{'#'}" >
+                            Date</a>
+                        </th>
+                        <th>
+                            <a th:href="@{'/user/index?page=' + ${currentPage} +'&sortField=malade&sortDir=' + ${reverseSortDir}+ '&keyword='+${keyword}}">
+                            Malade</a>
+                        </th>
+                        <th>
+                            <a th:href="@{'/user/index?page=' + ${currentPage} +'&sortField=score&sortDir=' + ${reverseSortDir}+ '&keyword='+${keyword}}" >
+                            Score</a>
+                        </th>
+                        <th style="width: 250px;text-align: center" >Actions</th>
                     </tr>
                     </thead>
+
 
                     <tbody>
                     <tr th:each="p:${listePatients}">
@@ -32,12 +54,12 @@
                         <td th:text="${p.dateNaissance}"></td>
                         <td th:text="${p.malade}"></td>
                         <td th:text="${p.score}"></td>
-                        <td sec:authorize="hasRole('ADMIN')">
+                        <td sec:authorize="hasAuthority('ADMIN')">
                             <a onclick="return confirm('Etes vous sure?')" class="btn btn-danger" th:href="@{/admin/delete(id=${p.id},keyword=${keyword},page=${currentPage})}">
                                 Delete
                             </a>
                         </td>
-                        <td sec:authorize="hasRole('ADMIN')">
+                        <td sec:authorize="hasAuthority('ADMIN')">
                             <a class="btn btn-success" th:href="@{/admin/editPatient(id=${p.id},keyword=${keyword},page=${currentPage})}">
                                 Edit
                             </a>
@@ -49,7 +71,7 @@
                     <li th:each="page,status:${pages}">
                         <a th:class="${status.index==currentPage}?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'"
                            th:text="${status.index}"
-                           th:href="@{/user/index(page=${status.index},keyword=${keyword})}"
+                           th:href="@{/user/index(page=${status.index},keyword=${keyword},currentPage=${currentPage},sortDir=${sortDir},sortField=${sortField})}"
                         ></a>
                     </li>
                 </ul>
